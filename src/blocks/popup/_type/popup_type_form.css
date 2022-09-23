@@ -1,0 +1,21 @@
+.popup_type_form {
+    width: 100%;
+    max-width: 470px;
+    position: fixed;
+    margin: auto;
+    top: 154px;
+    left: calc((100% - 430px) / 2);
+}
+
+@media screen and (max-width: 768px) {
+    .popup_type_form {
+        top: 84px;
+    }
+}
+
+@media screen and (max-width: 570px) {
+    .popup_type_form {
+        width: 88.125%;
+        left: calc(11.875% / 2);
+    }
+}

@@ -1,0 +1,10 @@
+.profile__info {
+    justify-items: left;
+}
+
+@media screen and (max-width: 768px) {
+    .profile__info {
+        padding-left: 26px;
+        max-width: 90%;
+    }
+}

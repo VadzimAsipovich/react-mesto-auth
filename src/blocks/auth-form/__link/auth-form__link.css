@@ -1,0 +1,11 @@
+.auth-form__link{
+    all: unset;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    align-self: center;
+    margin-top: 15px;
+    cursor: pointer;
+}
