@@ -30,10 +30,10 @@ function Register(props) {
   }
 
   return (
-    <form className="flex-column auth-form" noValidate>
+    <form className="flex-column auth-form">
       <h2 className="auth-form__header">Регистрация</h2>
       <input value={email} className="auth-form__input" onChange={valueEmailHandleChange} type="email" placeholder="Email"></input>
-      <input value={password} className="auth-form__input" onChange={valuePasswordHandleChange} placeholder="Пароль"></input>
+      <input value={password} className="auth-form__input" onChange={valuePasswordHandleChange} type="password" placeholder="Пароль"></input>
       <button type="submit" className="button auth-form__button" name="save" onClick={onRegister}>
         Зарегистрироваться
       </button>

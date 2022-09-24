@@ -33,25 +33,33 @@ class App extends React.Component {
   }
 
   handleRegistrationState = (state) => {
-      this.setState({isRegistrationSuccessful: state});
-  }
+    this.setState({ isRegistrationSuccessful: state });
+  };
+
+  handleLoginState = (state) => {
+    this.setState({ loggedIn: state });
+  };
 
   componentDidMount = () => {
-    apiInstance
-      .getUser()
-      .then((userData) => {
-        this.setState({ currentUser: userData });
-      })
-      .catch((e) => console.log(e));
-    apiInstance
-      .getInitialCards()
-      .then((cards) => {
-        this.setState({ cards: cards });
-      })
-      .catch((e) => console.log(e));
     this.tokenCheck();
-    console.log(this.state.email);
   };
+
+  componentDidUpdate = () => {
+    if (this.state.loggedIn) {
+      apiInstance
+        .getUser()
+        .then((userData) => {
+          this.setState({ currentUser: userData });
+        })
+        .catch((e) => console.log(e));
+      apiInstance
+        .getInitialCards()
+        .then((cards) => {
+          this.setState({ cards: cards });
+        })
+        .catch((e) => console.log(e));
+    }
+  }
 
   handleEditAvatarClick = (e) => {
     this.setState({ isEditAvatarPopupOpen: true });
@@ -158,12 +166,11 @@ class App extends React.Component {
     const jwt = localStorage.getItem("jwt");
     if (jwt) {
       auth.getContent(jwt).then((res) => {
-        console.log(res);
         if (res) {
           this.setState(
             {
               loggedIn: true,
-              email: res.data["email"]
+              email: res.data["email"],
             },
             () => {
               this.props.history.push("/");
@@ -179,7 +186,10 @@ class App extends React.Component {
       <CurrentUserContext.Provider value={this.state.currentUser}>
         <div className="App">
           <div className="page flex-column">
-            <Header email={this.state.email}/>
+            <Header
+              email={this.state.email}
+              handleLoginState={this.handleLoginState}
+            />
             <Switch>
               <ProtectedRoute
                 exact
@@ -202,7 +212,10 @@ class App extends React.Component {
                 />
               </Route>
               <Route path="/sign-in">
-                <Login loggedIn={this.state.loggedIn} />
+                <Login
+                  loggedIn={this.state.loggedIn}
+                  handleLoginState={this.handleLoginState}
+                />
               </Route>
             </Switch>
             <Footer />

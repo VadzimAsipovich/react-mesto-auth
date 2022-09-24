@@ -6,6 +6,7 @@ function Header(props) {
   const history = useHistory();
   function signOut(){
     localStorage.removeItem('jwt');
+    props.handleLoginState(false);
     history.push('/sign-in');
   }
   const location = useLocation();
