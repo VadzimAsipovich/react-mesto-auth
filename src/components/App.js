@@ -44,20 +44,22 @@ class App extends React.Component {
     this.tokenCheck();
   };
 
-  componentDidUpdate = () => {
-    if (this.state.loggedIn) {
-      apiInstance
-        .getUser()
-        .then((userData) => {
-          this.setState({ currentUser: userData });
-        })
-        .catch((e) => console.log(e));
-      apiInstance
-        .getInitialCards()
-        .then((cards) => {
-          this.setState({ cards: cards });
-        })
-        .catch((e) => console.log(e));
+  componentDidUpdate = (prevProps, prevState) => {
+    if(prevState.loggedIn !== this.state.loggedIn){
+      if (this.state.loggedIn) {
+        apiInstance
+          .getUser()
+          .then((userData) => {
+            this.setState({ currentUser: userData });
+          })
+          .catch((e) => console.log(e));
+        apiInstance
+          .getInitialCards()
+          .then((cards) => {
+            this.setState({ cards: cards });
+          })
+          .catch((e) => console.log(e));
+      }
     }
   }
 
@@ -213,6 +215,7 @@ class App extends React.Component {
               </Route>
               <Route path="/sign-in">
                 <Login
+                  onLogin={this.onLogin}
                   loggedIn={this.state.loggedIn}
                   handleLoginState={this.handleLoginState}
                 />
