@@ -183,6 +183,17 @@ class App extends React.Component {
     }
   }
 
+ onLogin = (e,email,password,handleLoginState) => {
+    e.preventDefault();
+    auth.authorize(email, password).then((res) => {
+      if(res.token){
+        localStorage.setItem('jwt', res.token);
+        handleLoginState(true);
+        this.props.history.push("/");
+      }
+    })
+  }
+
   render() {
     return (
       <CurrentUserContext.Provider value={this.state.currentUser}>

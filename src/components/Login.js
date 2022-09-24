@@ -16,14 +16,7 @@ function Login(props) {
   }
 
   function onLogin(e) {
-    e.preventDefault();
-    auth.authorize(email, password).then((res) => {
-      if(res.token){
-        localStorage.setItem('jwt', res.token);
-        props.handleLoginState(true);
-        history.push("/");
-      }
-    })
+    props.onLogin(e,email,password,props.handleLoginState);
   }
 
   return (
