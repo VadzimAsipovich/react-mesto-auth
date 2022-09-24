@@ -1,9 +1,6 @@
 import React from "react";
-import * as auth from '../utils/auth.js';
-import { useHistory } from "react-router-dom";
 
 function Login(props) {
-  const history = useHistory();
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
 
