@@ -1,6 +1,6 @@
 import React from "react";
-import successImage from "../images/success.svg"
-import failureImage from "../images/failure.svg"
+import successImage from "../images/success.svg";
+import failureImage from "../images/failure.svg";
 
 class InfoTooltip extends React.Component {
   constructor(props) {
@@ -35,9 +35,18 @@ class InfoTooltip extends React.Component {
           type="button"
         />
         <div className="info-tooltip flex-column">
-          <img className="info-tooltip__image" src={this.props.isRegistrationSuccessful ? successImage : failureImage} alt="статус регистрации"/>
-          <h2 className="info-tooltip__header" >{this.props.isRegistrationSuccessful ? "Вы успешно зарегистрировались!" : 
-          "Что-то пошло не так! Попробуйте ещё раз."}</h2>
+          <img
+            className="info-tooltip__image"
+            src={
+              this.props.isRegistrationSuccessful ? successImage : failureImage
+            }
+            alt="статус регистрации"
+          />
+          <h2 className="info-tooltip__header">
+            {this.props.isRegistrationSuccessful
+              ? "Вы успешно зарегистрировались!"
+              : this.props.errorMessage}
+          </h2>
         </div>
 
         <span className="popup__overlay"></span>

@@ -29,12 +29,9 @@ class App extends React.Component {
       loggedIn: false,
       email: "",
       isRegistrationSuccessful: false,
+      errorMessage: "",
     };
   }
-
-  handleRegistrationState = (state) => {
-    this.setState({ isRegistrationSuccessful: state });
-  };
 
   handleLoginState = (state) => {
     this.setState({ loggedIn: state });
@@ -45,7 +42,7 @@ class App extends React.Component {
   };
 
   componentDidUpdate = (prevProps, prevState) => {
-    if(prevState.loggedIn !== this.state.loggedIn){
+    if (prevState.loggedIn !== this.state.loggedIn) {
       if (this.state.loggedIn) {
         apiInstance
           .getUser()
@@ -61,7 +58,7 @@ class App extends React.Component {
           .catch((e) => console.log(e));
       }
     }
-  }
+  };
 
   handleEditAvatarClick = (e) => {
     this.setState({ isEditAvatarPopupOpen: true });
@@ -167,32 +164,54 @@ class App extends React.Component {
   tokenCheck() {
     const jwt = localStorage.getItem("jwt");
     if (jwt) {
-      auth.getContent(jwt).then((res) => {
-        if (res) {
-          this.setState(
-            {
-              loggedIn: true,
-              email: res.data["email"],
-            },
-            () => {
-              this.props.history.push("/");
-            }
-          );
-        }
-      }).catch((e) => console.log(e));
+      auth
+        .getContent(jwt)
+        .then((res) => {
+          if (res) {
+            this.setState(
+              {
+                loggedIn: true,
+                email: res.data["email"],
+              },
+              () => {
+                this.props.history.push("/");
+              }
+            );
+          }
+        })
+        .catch((e) => console.log(e));
     }
   }
 
- onLogin = (e,email,password,handleLoginState) => {
+  onLogin = (e, email, password) => {
     e.preventDefault();
     auth.authorize(email, password).then((res) => {
-      if(res.token){
-        localStorage.setItem('jwt', res.token);
-        handleLoginState(true);
+      if (res.token) {
+        localStorage.setItem("jwt", res.token);
+        this.setState({ loggedIn: true });
         this.props.history.push("/");
+      } else {
+        this.setState({ errorMessage: res.message });
+        this.setState({ isRegistrationSuccessful: false });
+        this.openInfoTooltip();
       }
-    })
-  }
+    });
+  };
+
+  onRegister = (e, email, password) => {
+    e.preventDefault();
+    auth.register(email, password).then((res) => {
+      console.log(res);
+      if (res.data) {
+        this.props.history.push("/sign-in");
+        this.setState({ isRegistrationSuccessful: true });
+      } else {
+        this.setState({ errorMessage: res.message || res.error });
+        this.setState({ isRegistrationSuccessful: false });
+      }
+      this.openInfoTooltip();
+    });
+  };
 
   render() {
     return (
@@ -221,15 +240,11 @@ class App extends React.Component {
                 <Register
                   isRegistrationSuccessful={this.state.isRegistrationSuccessful}
                   onRegistrationAttempt={this.openInfoTooltip}
-                  handleRegistrationState={this.handleRegistrationState}
+                  onRegister={this.onRegister}
                 />
               </Route>
               <Route path="/sign-in">
-                <Login
-                  onLogin={this.onLogin}
-                  loggedIn={this.state.loggedIn}
-                  handleLoginState={this.handleLoginState}
-                />
+                <Login onLogin={this.onLogin} loggedIn={this.state.loggedIn} />
               </Route>
             </Switch>
             <Footer />
@@ -256,6 +271,7 @@ class App extends React.Component {
               isOpen={this.state.isEditInfoTooltipOpen}
               onClose={this.closeAllPopups}
               isRegistrationSuccessful={this.state.isRegistrationSuccessful}
+              errorMessage={this.state.errorMessage}
             />
           </div>
         </div>

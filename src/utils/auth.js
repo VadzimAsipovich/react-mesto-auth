@@ -1,72 +1,63 @@
-export const BASE_URL = 'https://auth.nomoreparties.co';
+export const BASE_URL = "https://auth.nomoreparties.co";
 
 export const register = (email, password) => {
   return fetch(`${BASE_URL}/signup`, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify({"password": password,
-    "email": email })
+    body: JSON.stringify({ password: password, email: email }),
   })
-  .then((response) => {
-    try {
-      if (response.status === 201){
+    .then((response) => {
+      if (response.status === 201) {
         return response.json();
+      } else {
+        return Promise.reject(response.json());
       }
-    } catch(e){
-      return (e)
-    }
-  })
-  .then((res) => {
-    return res;
-  })
-  .catch((err) => console.log(err));
+    })
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => err);
 };
 
 export const authorize = (email, password) => {
-    return fetch(`${BASE_URL}/signin`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({"password": password,
-      "email": email })
-    })
+  return fetch(`${BASE_URL}/signin`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ password: password, email: email }),
+  })
     .then((response) => {
-      try {
-        if (response.status === 200){
-          return response.json();
-        }
-      } catch(e){
-        return (e)
+      if (response.status === 200) {
+        return response.json();
+      } else {
+        return Promise.reject(response.json());
       }
     })
-    .then((res) => {
-        return res;
-      })
-    .catch((err) => console.log(err));
-  }; 
+    .catch((err) => err);
+};
 
-  export const getContent = (token) => {
-    return fetch(`${BASE_URL}/users/me`, {
-      method: 'GET',
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization" : `Bearer ${token}`
-      },
-    })
+export const getContent = (token) => {
+  return fetch(`${BASE_URL}/users/me`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  })
     .then((response) => {
       try {
-        if (response.status === 200){
+        if (response.status === 200) {
           return response.json();
         }
-      } catch(e){
-        return (e)
+      } catch (e) {
+        return e;
       }
     })
     .then((res) => {
-        return res;
-      })
+      return res;
+    })
     .catch((err) => console.log(err));
-  }; 
+};
