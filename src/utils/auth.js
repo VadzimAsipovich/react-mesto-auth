@@ -48,16 +48,11 @@ export const getContent = (token) => {
     },
   })
     .then((response) => {
-      try {
-        if (response.status === 200) {
-          return response.json();
-        }
-      } catch (e) {
-        return e;
+      if (response.status === 200) {
+        return response.json();
+      } else {
+        return Promise.reject(response.json());
       }
-    })
-    .then((res) => {
-      return res;
     })
     .catch((err) => console.log(err));
 };
